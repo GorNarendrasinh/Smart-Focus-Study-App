@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Focus Dashboard</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI', sans-serif; background:#f5f5f5; color:#333; display:flex; flex-direction:column; align-items:center; padding:20px; min-height:100vh; }
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:10px 15px; background-color:#3e95cd; border-radius:8px; color:#fff; margin-bottom:20px; width:100%; }
+.navbar .logo { font-weight:bold; font-size:20px; }
+.navbar a { color:#fff; text-decoration:none; margin-left:15px; font-weight:500; }
+.navbar a:hover { color:#ffd700; }
+.container { width:100%; max-width:750px; background:#fff; padding:25px; margin-bottom:25px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+h1 { text-align:center; margin-bottom:20px; color:#3e95cd; font-size:26px; }
+.ai-suggestion { background:#e0f7fa; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; font-style:italic; color:#00796b; min-height:28px; }
+input[type=text], textarea { width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; font-size:16px; }
+button { padding:10px 15px; border:none; border-radius:6px; background:#3e95cd; color:#fff; cursor:pointer; transition:0.3s; }
+button:hover { background:#357ab8; }
+button:disabled { background:#aaa; cursor:not-allowed; }
+ul { list-style:none; padding:0; max-height:350px; overflow-y:auto; }
+ul li { background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
+ul li.done { text-decoration:line-through; color:#888; }
+ul li button { margin-left:5px; padding:5px 10px; font-size:14px; border:none; background:#3e95cd; color:white; border-radius:5px; cursor:pointer;}
+ul li button:hover { background:#357ab8; }
+.entries { margin-top:15px; }
+.entry { background:#f1f1f1; padding:10px; border-radius:6px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;}
+.entry button { background:#3e95cd; color:#fff; border:none; border-radius:5px; padding:5px 10px; cursor:pointer; }
+.entry button:hover { background:#357ab8; }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo">SmartFocus</div>
+  <div>
+    <a href="/">Dashboard</a>
+    <a href="#">Schedule</a>
+    <a href="#">Pomodoro</a>
+    <a href="#">Notes</a>
+    <a href="#">Logout</a>
+  </div>
+</div>
+
+<!-- Todo App -->
+<div class="container">
+  <h1>AI To-Do App</h1>
+  <div class="ai-suggestion" id="aiSuggestion">Stay focused and never give up!</div>
+
+  <input type="text" id="taskInput" placeholder="Add a new task">
+  <button id="addTaskBtn" disabled>Add Task</button>
+
+  <ul id="taskList">
+    {% for task in tasks %}
+      <li data-id="{{ task.id }}" class="{% if task.completed %}done{% endif %}">
+        <span>{{ task.text }}</span>
+        <div>
+          <button class="toggleBtn">{% if task.completed %}Undo{% else %}✔{% endif %}</button>
+          <button class="deleteBtn">🗑</button>
+        </div>
+      </li>
+    {% empty %}
+      <li>No tasks yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- Journal App -->
+<div class="container">
+  <h1>Daily Journal</h1>
+  <textarea id="journalInput" placeholder="Write your thoughts, mood, or progress..."></textarea>
+  <button id="saveEntryBtn">Save Entry</button>
+  <div class="entries" id="entries">
+    {% for entry in journal_entries %}
+      <div class="entry" data-id="{{ entry.id }}">
+        <span>{{ entry.content }}</span>
+        <button class="deleteEntryBtn">🗑</button>
+      </div>
+    {% empty %}
+      <div>No entries yet.</div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function getCookie(name){
+    let cookieValue = null;
+    if(document.cookie && document.cookie!==''){
+        const cookies = document.cookie.split(';');
+        for(let cookie of cookies){
+            cookie = cookie.trim();
+            if(cookie.startsWith(name+'=')){
+                cookieValue = decodeURIComponent(cookie.substring(name.length+1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+// ==== Todo JS ====
+const taskInput = document.getElementById('taskInput');
+const addTaskBtn = document.getElementById('addTaskBtn');
+const taskList = document.getElementById('taskList');
+
+taskInput.addEventListener('input', () => addTaskBtn.disabled = taskInput.value.trim() === '');
+
+function attachTaskEvents(li){
+    const toggleBtn = li.querySelector('.toggleBtn');
+    const deleteBtn = li.querySelector('.deleteBtn');
+
+    toggleBtn.addEventListener('click', ()=>{
+        const taskId = li.dataset.id;
+        fetch(`/toggle-task/${taskId}/`, {method:'POST', headers:{'X-CSRFToken': csrftoken}})
+        .then(res => res.json())
+        .then(data => {
+            li.classList.toggle('done', data.completed);
+            toggleBtn.textContent = data.completed ? 'Undo' : '✔';
+        });
+    });
+
+    deleteBtn.addEventListener('click', ()=>{
+        const taskId = li.dataset.id;
+        fetch(`/delete-task/${taskId}/`, {method:'POST', headers:{'X-CSRFToken': csrftoken}})
+        .then(res => res.json())
+        .then(data => {
+            if(data.deleted) li.remove();
+        });
+    });
+}
+
+// Attach events
+// Attach events to existing tasks
+document.querySelectorAll('#taskList li[data-id]').forEach(li => attachTaskEvents(li));
+
+// Add new task
+addTaskBtn.addEventListener('click', () => {
+    const text = taskInput.value.trim();
+    if(!text) return;
+
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${text}</span><div><button class="toggleBtn">✔</button><button class="deleteBtn">🗑</button></div>`;
+    taskList.prepend(li);
+
+    fetch("{% url 'add_task' %}", {
+        method:'POST',
+        headers:{'X-CSRFToken': csrftoken, 'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({text})
+    }).then(res => res.json())
+      .then(task => {
+          li.dataset.id = task.id;
+          attachTaskEvents(li);
+      });
+
+    taskInput.value = '';
+    addTaskBtn.disabled = true;
+});
+
+// ==== Journal JS ====
+const saveEntryBtn = document.getElementById('saveEntryBtn');
+const journalInput = document.getElementById('journalInput');
+const entriesDiv = document.getElementById('entries');
+
+function attachJournalDeleteEvent(div){
+    const deleteBtn = div.querySelector('.deleteEntryBtn');
+    deleteBtn.addEventListener('click', ()=>{
+        const entryId = div.dataset.id;
+        fetch(`/delete-journal/${entryId}/`, {method:'POST', headers:{'X-CSRFToken': csrftoken}})
+        .then(res => res.json())
+        .then(data => {
+            if(data.deleted) div.remove();
+        });
+    });
+}
+
+// Attach delete to existing journal entries
+document.querySelectorAll('.entry[data-id]').forEach(div => attachJournalDeleteEvent(div));
+
+// Add new journal entry
+saveEntryBtn.addEventListener('click', () => {
+    const content = journalInput.value.trim();
+    if(!content) return;
+
+    const div = document.createElement('div');
+    div.className = 'entry';
+    div.innerHTML = `<span>${content}</span><button class="deleteEntryBtn">🗑</button>`;
+    entriesDiv.prepend(div);
+
+    fetch("{% url 'save_journal' %}", {
+        method:'POST',
+        headers:{'X-CSRFToken': csrftoken, 'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({content})
+    }).then(res => res.json())
+      .then(entry => {
+          div.dataset.id = entry.id;
+          attachJournalDeleteEvent(div);
+      });
+
+    journalInput.value = '';
+});
+</script>
+</body>
+</html>

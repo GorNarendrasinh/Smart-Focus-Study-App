@@ -1,0 +1,597 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    color: #333;
+    line-height: 1.5;
+    transition: 0.3s;
+
+}
+
+body.dark {
+    background: #121212;
+    color: #fff;
+}
+
+body.dark .navbar {
+    background: #1f1f1f;
+}
+
+body.dark .quote-section,
+body.dark .tracker-section div,
+body.dark .goal-streak,
+body.dark .quick-access-cards .card,
+body.dark .stats-section,
+body.dark .ai-section {
+    background: #1f1f1f;
+    color: #fff;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* logo left, menu right */
+    padding: 10px 20px;
+  /* gradient navbar */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+/* Common button style */
+.nav-buttons {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 12px 22px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Dashboard button */
+.btn-dashboard {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+}
+.btn-dashboard:hover {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  transform: translateY(-3px);
+}
+
+/* Register button */
+.btn-register {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  color: white;
+}
+.btn-register:hover {
+  background: linear-gradient(135deg, #00c853, #00e676);
+  transform: translateY(-3px);
+}
+
+/* Logout button */
+.btn-logout {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+}
+.btn-logout:hover {
+  background: linear-gradient(135deg, #e53935, #d32f2f);
+  transform: translateY(-3px);
+}
+/* 
+
+===== Navbar Styling ===== */
+.logo1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    left: 170px;
+    transition: all 0.3s ease-in-out;
+}
+
+.logo1:hover {
+    color: #ff7a64;
+    font-size: 40px;
+    filter: drop-shadow(0 0 10px #ff7a64);
+    cursor: pointer;
+}
+.navbar {
+  width: 100%;
+  background-color: #333; /* example background */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  position: static; /* ensures it is static (default) */
+  top: 0; /* only matters if position is fixed/sticky */
+}
+
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ff4b2b;
+}
+
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+/* Hover / Focus effect for text */
+.nav-links a:hover,
+.nav-links a:focus {
+    color: yellow;
+}
+
+/* Underline base (hidden) */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;             /* start from 0 */
+    height: 2px;
+    background: yellow;
+    left: 0;              /* starting point */
+    bottom: 0;
+    transition: width 0.4s ease; /* smooth appear/disappear */
+}
+
+/* Expand underline on hover/focus */
+.nav-links a:hover::after,
+.nav-links a:focus::after {
+    width: 100%; /* full width */
+}
+
+/* Navbar Buttons */
+.nav-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.nav-buttons a {
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    background: #ff4b2b;
+    color: #fff;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.nav-buttons a:hover {
+    background: #e84320;
+    transform: scale(1.05);
+}
+
+
+  .btn-dashboard {
+    background: #ff4b2b;
+    color: #fff;
+  }
+
+  .btn-dashboard:hover {
+    background: #ff6a4d;
+  }
+
+  .btn-register {
+    background: #fff;
+    color: #222;
+    border: 2px solid #ff4b2b;
+  }
+
+  .btn-register:hover {
+    background: #ff4b2b;
+    color: #fff;
+  }
+
+  .toggleBtn {
+    display: none;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .toggleBtn { display: block; }
+  }
+/* Toggle button for mobile */
+
+
+
+/* ===== Container ===== */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ===== Welcome ===== */
+.welcome-section {
+    text-align: center;
+}
+
+.welcome-section h1 {
+    font-size: 2rem;
+    color: #3e95cd;
+    margin-bottom: 5px;
+}
+
+.welcome-section p {
+    color: #555;
+}
+
+/* ===== Quote ===== */
+.quote-section {
+    background: #e0f7fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-style: italic;
+    color: #00796b;
+}
+
+/* ===== Tracker ===== */
+
+
+
+/* ===== Goal & Streak ===== */
+.goal-streak {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.goal-streak p {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+/* ===== Quick Access Cards ===== */
+.quick-access-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+    justify-content: center;
+   
+
+}
+
+.quick-access-cards .card {
+  
+
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,10);
+    padding: 10px;
+    transition: 0.5s;
+     background-color: whitesmoke;
+     color: black;
+
+}
+
+.quick-access-cards .card:hover {
+    transform: translateY(-15px);
+
+}
+
+.quick-access-cards img {
+max-width: 140px;
+    height: 95px;
+    margin-bottom: 10px;
+   position: relative;
+
+   border-radius: 10px;
+
+}
+
+/* ===== Stats Charts ===== */
+/* ===== Stats Charts ===== */
+.stats-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+    top: 35px;
+    margin-top: 20px;
+}
+
+.stats-section h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.stats-section canvas {
+    width: 100% !important;
+    max-width: 100%;
+    height: 300px;
+}
+
+/* ===== AI Suggestions ===== */
+.ai-section {
+    background: #e8f4fd;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    color: #00796b;
+    font-style: italic;
+    margin-top: 2rem;
+   
+}
+
+/* ===== Dark Mode Button ===== */
+#darkModeBtn {
+    padding: 10px 15px;
+    height: 2rem;
+    max-width: 25rem;
+    border: none;
+    border-radius: 8px;
+    background: #3e95cd;
+    color: #fff;
+    cursor: pointer;
+   margin-left: 25rem;
+}
+
+/* ===== Footer ===== */
+footer {
+    background: #3e95cd;
+    color: #fff;
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+footer a {
+    color: #ffd700;
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 0.9rem;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer .links {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+  /* new feature added */
+h2 { color:#ff4b2b; text-align:center; margin-bottom:15px; }
+.feature-card { background:#fff; padding:20px; border-radius:15px; box-shadow:0 6px 12px rgba(0,0,0,0.1); margin-bottom:25px; width:90%; max-width:500px; }
+.feature-card:hover { transform:translateY(-3px); transition:0.3s; }
+input[type=text], input[type=time] { width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px; font-size:14px; }
+button { padding:10px; border:none; border-radius:8px; cursor:pointer; font-weight:600; margin-right:5px; width:32%; transition:0.3s; }
+button:hover { opacity:0.9; }
+.btn-start { background:#28a745; color:#fff; }
+.btn-stop { background:#ff4b2b; color:#fff; }
+.btn-clear { background:#6c757d; color:#fff; }
+.timer-display { font-size:24px; font-weight:bold; text-align:center; margin-top:10px; padding:8px; border-radius:8px; background:#f0f0f0; }
+.progress-bar { width:100%; background:#ddd; height:10px; border-radius:5px; margin-top:8px; overflow:hidden; }
+.progress-fill { height:100%; width:0%; background:#28a745; transition:width 0.5s; }
+
+.card { background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition:0.3s; }
+.card h2 { margin-bottom:10px; color:#ff4b2b; }
+button.start-btn { background:#ff4b2b; color:#fff; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:10px; }
+/* Quick Notes Section */
+.feature-card.quick-notes {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex:1;
+    min-width:280px;
+    display:flex;
+    flex-direction:column;
+  
+}
+
+.feature-card.quick-notes h2 {
+    margin-top:0;
+    margin-bottom:10px;
+    font-size:1.3em;
+}
+
+#quickNotes {
+    width:100%;
+    padding:10px;
+    resize:none;
+    font-size:1em;
+    border:1px solid #ccc;
+    border-radius:5px;
+    margin-bottom:10px;
+}
+
+.feature-card.quick-notes .btn-start,
+.feature-card.quick-notes .btn-clear {
+    padding:8px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:0.95em;
+}
+
+.feature-card.quick-notes .btn-start { background:#4caf50; color:white; }
+.feature-card.quick-notes .btn-clear { background:#f44336; color:white; }
+
+.feature-card.quick-notes .btn-container {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.saved-notes {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.saved-notes .note-item {
+    background:#f0f0f0;
+    padding:8px 10px;
+    border-radius:5px;
+    font-size:0.95em;
+    word-wrap: break-word;
+}
+/* Container for Study Planner + Quick Notes */
+.feature-grid {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap; /* Makes it responsive on small screens */
+}
+
+/* Both cards */
+.feature-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 300px; /* Ensures responsive behavior */
+}
+
+/* Quick Notes Specific */
+.feature-card.quick-notes textarea {
+    width: 100%;
+    padding: 10px;
+    resize: none;
+    font-size: 1em;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+}
+
+.feature-card.quick-notes .btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.saved-notes .note-item {
+    background: #f0f0f0;
+    padding: 8px 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.daily-challenge {
+    background: #fff;
+    padding: 20px;
+   
+    max-width: 650px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.daily-challenge:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.daily-challenge h2 {
+    margin-top: 0;
+}
+
+.daily-challenge textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+    transition: border-color 0.3s;
+}
+
+.daily-challenge textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 4px;
+}
+
+.daily-challenge .btn-container {
+    margin-top: 10px;
+}
+
+.daily-challenge button {
+    padding: 3px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #3498db;
+    color: white;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.daily-challenge button:hover {
+    background: #2980b9;
+    transform: scale(1.05);
+}
+
+.challenge-display {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 10px;
+    border-radius: 6px;
+    min-height: 40px;
+    background: #f0f0f0;
+    transition: background 0.5s, opacity 0.5s;
+}
+
+.challenge-display.saved {
+    background: #d4edda; /* light green on save */
+    opacity: 1;
+}
+
+/* Logo Box */
+.logo img {
+    height: 80px;         /* fix height */
+    width: auto;          /* maintain aspect ratio */
+    border-radius: 8px;   /* rounded corners */
+    object-fit: contain;  /* full image fit */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-blend-mode: color-burn;
+}
+
+/* Hover effect */
+.logo img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}

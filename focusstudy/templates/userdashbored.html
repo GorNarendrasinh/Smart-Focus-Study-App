@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI + Focus Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; }
+    header { background:#ff4b2b; color:#fff; padding:15px 25px; display:flex; justify-content:space-between; align-items:center; }
+    header h1 { font-size:22px; }
+    .nav-links { list-style:none; display:flex; gap:20px; margin:0; padding:0; }
+    .nav-links li a { color:#fff; text-decoration:none; font-weight:bold; transition:0.3s; }
+    .nav-links li a:hover { color:#000; background:#fff; padding:5px 10px; border-radius:10px; }
+    header button { background:#fff; color:#ff4b2b; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:bold; }
+    .container { display:grid; grid-template-columns: repeat(2,1fr); gap:20px; padding:20px; }
+    .card { background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition:0.3s; }
+    .card h2 { margin-bottom:10px; color:#ff4b2b; }
+    .profile { display:flex; align-items:center; gap:10px; }
+    .profile img { width:50px; border-radius:50%; }
+    .todo-list li { margin:5px 0; }
+    .badge { display:inline-block; background:#ff4b2b; color:#fff; padding:5px 12px; border-radius:12px; margin:3px 0; }
+    button.start-btn { background:#ff4b2b; color:#fff; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:10px; }
+    footer { text-align:center; padding:15px; margin-top:20px; background:#eee; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 AI + Focus Study Dashboard</h1>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#">🏠 Dashboard</a></li>
+      <li><a href="#">📅 Schedule</a></li>
+      <li><a href="#">✅ Tasks</a></li>
+      <li><a href="#">📚 Resources</a></li>
+    </ul>
+  </nav>
+  <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+</header>
+<div class="container">
+<!-- User Profile -->
+  <div class="card profile-card">
+    <h2>👤 User Profile</h2>
+    <div class="profile">
+      <img src="https://i.pravatar.cc/100" alt="User">
+      <div>
+        {% if request.session.user_name %}
+          <h2>Welcome, {{ request.session.user_name }} 🎉</h2>
+          <p><b>Email:</b> {{ request.session.user_email }}</p>
+
+          <!-- Logout Button -->
+          <form action="{% url 'logout' %}" method="POST" style="margin-top:10px;">
+            {% csrf_token %}
+            <button class="start-btn" style="background:linear-gradient(135deg,#ff416c,#ff4b2b);border:none;border-radius:12px;color:white;cursor:pointer;padding:8px 15px;font-weight:bold;">
+              Logout
+            </button>
+          </form>
+
+        {% else %}
+          <h2>Welcome to your Dashboard</h2>
+          <p><a href="{% url 'registartion' %}">Please Register</a></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="card">
+    <h2>⚡ Quick Actions</h2>
+    <p id="pomodoroStatus">No active Pomodoro</p>
+    <button class="start-btn" onclick="startPomodoro()">🎯 Start Pomodoro</button>
+  </div>
+
+  <!-- Pomodoro Activity Log -->
+  <div class="card">
+    <h2>📝 Pomodoro Activity</h2>
+    <ul id="pomodoroLog"></ul>
+  </div>
+
+  <!-- AI Suggestions -->
+  <div class="card">
+    <h2>🤖 AI Suggestions</h2>
+    <p id="aiTip">Focus on Maths for 2 hours today.</p>
+  </div>
+
+  <!-- Today’s Tasks -->
+  <div class="card">
+    <h2>📌 Today’s Tasks</h2>
+    <ul class="todo-list" id="taskList">
+      <li>✔️ Complete Chapter 5 (Maths)</li>
+      <li>✔️ Revise English Notes</li>
+      <li>❌ Physics Practice</li>
+    </ul>
+  </div>
+
+  <!-- Gamification -->
+  <div class="card">
+    <h2>🏆 Gamification</h2>
+    <p>XP Points: <span id="xp">120</span></p>
+    <p>Badges:</p>
+    <span class="badge">Focus Master</span>
+    <span class="badge">Early Bird</span>
+  </div>
+
+  <!-- Mood Tracker -->
+  <div class="card">
+    <h2>💆 Wellness & Mood</h2>
+    <p>Current Mood: <span id="moodText">😊</span></p>
+    <button onclick="setMood('😊')">😊</button>
+    <button onclick="setMood('😐')">😐</button>
+    <button onclick="setMood('😔')">😔</button>
+  </div>
+
+  <!-- Resources -->
+  <div class="card">
+    <h2>📚 Resources</h2>
+    <p><a href="#">📘 Notes</a></p>
+    <p><a href="#">📖 Motivational Books</a></p>
+    <p><a href="#">🎧 Focus Music</a></p>
+  </div>
+
+  <!-- Settings -->
+  <div class="card">
+    <h2>⚙️ Settings</h2>
+    <p>Pomodoro Timer: <input type="number" id="pomodoroTime" value="25"> min</p>
+    <button class="start-btn" onclick="saveSettings()">Save Settings</button>
+  </div>
+
+  <!-- Weekly Comparison -->
+  <div class="card">
+    <h2>📅 Weekly Comparison</h2>
+    <canvas id="weeklyChart"></canvas>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 AI Focus Study App</p>
+</footer>
+
+<script>
+  // === USER SYSTEM ===
+  function loginUser(){
+    const name = document.getElementById("userName").value;
+    const email = document.getElementById("userEmail").value;
+    if(name && email){
+      localStorage.setItem("user", JSON.stringify({name, email}));
+      localStorage.setItem("pomodoroLog", JSON.stringify([])); // reset log
+      showUser();
+      loadPomodoroLog();
+    } else {
+      alert("Please enter both name and email");
+    }
+  }
+
+  function showUser(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    if(user){
+      document.getElementById("loginSection").classList.add("hidden");
+      document.getElementById("userSection").classList.remove("hidden");
+      document.getElementById("welcomeMsg").innerText = "Welcome, " + user.name + " 🎉";
+      document.getElementById("userEmailText").innerText = user.email;
+    }
+  }
+
+  function logoutUser(){
+    localStorage.clear();
+    document.getElementById("loginSection").classList.remove("hidden");
+    document.getElementById("userSection").classList.add("hidden");
+    document.getElementById("pomodoroLog").innerHTML = "";
+    document.getElementById("pomodoroStatus").innerText = "No active Pomodoro";
+  }
+
+  // === Pomodoro Timer + Activity Log ===
+  let pomodoroTimer;
+  function startPomodoro(){
+    let mins = parseInt(document.getElementById("pomodoroTime").value) || 25;
+    let seconds = mins * 60;
+    clearInterval(pomodoroTimer);
+
+    document.getElementById("pomodoroStatus").innerText = "Pomodoro running: " + mins + " min left ⏳";
+
+    pomodoroTimer = setInterval(()=>{
+      seconds--;
+      let m = Math.floor(seconds/60);
+      let s = seconds%60;
+      document.getElementById("pomodoroStatus").innerText = `Pomodoro running: ${m}m ${s}s left ⏳`;
+
+      if(seconds <= 0){
+        clearInterval(pomodoroTimer);
+        document.getElementById("pomodoroStatus").innerText = "✅ Pomodoro Completed!";
+        savePomodoroActivity(mins);
+      }
+    },1000);
+  }
+
+  function savePomodoroActivity(duration){
+    let logs = JSON.parse(localStorage.getItem("pomodoroLog")) || [];
+    let now = new Date();
+    let time = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    logs.push(`Completed ${duration} min Pomodoro at ${time}`);
+    localStorage.setItem("pomodoroLog", JSON.stringify(logs));
+    loadPomodoroLog(); // 👈 तुरंत UI refresh
+  }
+
+  function loadPomodoroLog(){
+    let logs = JSON.parse(localStorage.getItem("pomodoroLog")) || [];
+    let logContainer = document.getElementById("pomodoroLog");
+    logContainer.innerHTML = "";
+    logs.forEach(l=>{
+      let li = document.createElement("li");
+      li.innerText = l;
+      logContainer.appendChild(li);
+    });
+  }
+
+  // === PAGE LOAD पर सब restore होगा ===
+  window.onload = function(){
+    showUser();
+    loadPomodoroLog();
+  }
+</script>
+
+
+</body>
+</html>
