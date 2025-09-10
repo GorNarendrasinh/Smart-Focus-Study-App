@@ -29,4 +29,6 @@ urlpatterns = [
     path('timetable/add/', views.timetable_add_task, name='timetable_add_task'),
     path('timetable/toggle/<int:task_id>/', views.timetable_toggle_task, name='timetable_toggle_task'),
     path('timetable/delete/<int:task_id>/', views.timetable_delete_task, name='timetable_delete_task'),
+
+     
 ]

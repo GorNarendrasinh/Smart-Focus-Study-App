@@ -1,10 +1,13 @@
 # users/views.py
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 
 # If you still have a separate Account model as profile, keep import but optional:
 from .models import Account, Task, JournalEntry, TimetableTask

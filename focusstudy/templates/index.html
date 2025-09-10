@@ -8,14 +8,83 @@
 <link rel="stylesheet" href="{% static 'style.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
+/* ✅ AI Assistant Styles */
+.ai-assistant {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 320px;
+  height: 500px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
 
+.ai-header {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.ai-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.ai-msg {
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  max-width: 85%;
+}
+
+.ai-user {
+  background: #2575fc;
+  color: #fff;
+  margin-left: auto;
+}
+
+.ai-bot {
+  background: #f1f1f1;
+  color: #333;
+  margin-right: auto;
+}
+
+.ai-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.ai-input input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.ai-input button {
+  background: #2575fc;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav class="navbar">
-<div class="logo">  <img src="static/images/logo.jpg" alt=""></div>
+  <div class="logo"><img src="static/images/logo.jpg" alt=""></div>
   <div class="logo1">SmartFocus</div>
   
   <div class="nav-links" id="navLinks">
@@ -26,15 +95,12 @@
     <a href="/notes">Notes-Analytics</a>
     <a href="/motivationbook">Ai+books</a>
   </div>
-<!-- Buttons Section -->
-<div class="nav-buttons">
-  <a href="/userdashbored" class="btn btn-dashboard">Users Dashboard</a>
-  <a href="/registartion" class="btn btn-register">Account</a>
-  <a href="{% url 'logout' %}" class="btn btn-logout">Logout</a>
-</div>
- 
-   
 
+  <!-- Buttons Section -->
+  <div class="nav-buttons">
+    <a href="/userdashbored" class="btn btn-dashboard">Users Dashboard</a>
+    <a href="/registartion" class="btn btn-register">Account</a>
+    <a href="{% url 'logout' %}" class="btn btn-logout">Logout</a>
   </div>
 
   <div class="toggleBtn" id="toggleBtn">&#9776;</div>
@@ -51,58 +117,54 @@
   <!-- Motivational Quote -->
   <div class="quote-section" id="motivationalQuote">“Focus on your goal. Don’t look anywhere but ahead.”</div>
 
-  <!-- Study Planner -->
-<!-- Study Planner + Quick Notes Container -->
-<div class="feature-grid">
-  <!-- Daily Study Planner -->
-  <div class="feature-card">
-    <h2>🗓 📚 Daily Study Planner</h2>
-    <input type="text" id="goalText" placeholder="Enter your study goal">
-    <input type="time" id="goalTime" placeholder="Set goal duration (HH:MM)">
-    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-      <button class="btn-start" onclick="startGoal()">Start Goal</button>
-      <button class="btn-stop" onclick="stopGoal()">Stop Goal</button>
-      <button class="btn-clear" onclick="clearGoal()">Clear Goal</button>
+  <!-- Study Planner + Quick Notes Container -->
+  <div class="feature-grid">
+    <!-- Daily Study Planner -->
+    <div class="feature-card">
+      <h2>🗓 📚 Daily Study Planner</h2>
+      <input type="text" id="goalText" placeholder="Enter your study goal">
+      <input type="time" id="goalTime">
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+        <button class="btn-start" onclick="startGoal()">Start Goal</button>
+        <button class="btn-stop" onclick="stopGoal()">Stop Goal</button>
+        <button class="btn-clear" onclick="clearGoal()">Clear Goal</button>
+      </div>
+      <div class="timer-display" id="goalTimer">00:00:00</div>
+      <div class="progress-bar"><div class="progress-fill" id="goalProgress"></div></div>
     </div>
-    <div class="timer-display" id="goalTimer">00:00:00</div>
-    <div class="progress-bar"><div class="progress-fill" id="goalProgress"></div></div>
-  </div>
 
-  <!-- Quick Notes -->
-  <div class="feature-card quick-notes">
-    <h2>📝 Quick Notes</h2>
-    <textarea id="quickNotes" placeholder="Write your notes here..." rows="10"></textarea>
-    <div class="btn-container">
-      <button class="btn-start" onclick="saveNote()">💾 Save Note</button>
-      <button class="btn-clear" onclick="clearNotes()">🗑 Clear All</button>
+    <!-- Quick Notes -->
+    <div class="feature-card quick-notes">
+      <h2>📝 Quick Notes</h2>
+      <textarea id="quickNotes" placeholder="Write your notes here..." rows="10"></textarea>
+      <div class="btn-container">
+        <button class="btn-start" onclick="saveNote()">💾 Save Note</button>
+        <button class="btn-clear" onclick="clearNotes()">🗑 Clear All</button>
+      </div>
+      <div id="savedNotes" class="saved-notes"></div>
     </div>
-    <div id="savedNotes" class="saved-notes"></div>
+
+    <!-- Daily Challenge Section -->
+    <div class="daily-challenge">
+      <h2>🎯 Daily Challenge</h2>
+      <textarea id="dailyInput" placeholder="Type your challenge for today..."></textarea>
+      <div class="btn-container">
+        <button onclick="saveChallenge()">💾 Save Challenge</button>
+        <button onclick="clearChallenge()">🗑 Clear</button>
+      </div>
+      <div id="savedChallenge" class="challenge-display"></div>
+    </div>
   </div>
 
-  <!-- Daily Challenge Section -->
-<div class="daily-challenge">
-  <h2>🎯 Daily Challenge</h2>
-  <textarea id="dailyInput" placeholder="Type your challenge for today..."></textarea>
-  <div class="btn-container">
-    <button onclick="saveChallenge()">💾 Save Challenge</button>
-    <button onclick="clearChallenge()">🗑 Clear</button>
-  </div>
-  <div id="savedChallenge" class="challenge-display"></div>
-</div>
-
-</div>
-
-<audio id="alarmSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" preload="auto"></audio>
-
+  <audio id="alarmSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" preload="auto"></audio>
 
   <!-- Quick Actions -->
-<!-- Quick Actions -->
-<div class="card">
-  <h2>⚡ Quick Actions</h2>
-  <button class="start-btn" onclick="startPomodoro()">🎯 Start Pomodoro</button>
-  <a href="/timetable"><button class="start-btn">📅 Today’s Schedule</button></a>
-  <a href="/todo"><button class="start-btn">✅ Open To-Do List</button></a>
-</div>
+  <div class="card">
+    <h2>⚡ Quick Actions</h2>
+    <button class="start-btn" onclick="startPomodoro()">🎯 Start Pomodoro</button>
+    <a href="/timetable"><button class="start-btn">📅 Today’s Schedule</button></a>
+    <a href="/todo"><button class="start-btn">✅ Open To-Do List</button></a>
+  </div>
 
   <!-- Quick Access Cards -->
   <div class="quick-access-cards">
@@ -113,24 +175,22 @@
     <div class="card" onclick="location.href='/pomodoro'"><img src="static/images/timig.png"><p>🎯 Pomodoro</p></div>
   </div>
 
-
-
   <!-- Stats Charts -->
   <div class="stats-section">
     <h2>📊 Focus Stats</h2>
     <canvas id="focusChart"></canvas>
   </div>
 
-
   <!-- AI Suggestions -->
   <div class="ai-section" id="aiSuggestions">
     “Focus tips will appear here based on your Pomodoro sessions & mood.”
   </div>
-    <!-- Study Planner -->
 
   <!-- Dark Mode -->
   <button id="darkModeBtn">🌙Toggle Dark Mode</button>
 </div>
+
+
 
 <!-- Footer -->
 <footer>
@@ -142,8 +202,6 @@
   </div>
 </footer>
 
-<script src="{% static 'index.js' %}">
-
-</script>
+<script src="{% static 'index.js' %}"></script>
 </body>
 </html>
