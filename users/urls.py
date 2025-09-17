@@ -12,6 +12,7 @@ urlpatterns = [
     path('notes/', views.notes, name='notes'),
     path('pomodoro/', views.pomodoro, name='pomodoro'),
     path('userdashbored/', views.dashbored, name='userdashbored'),
+    path("logout/", views.logout_user, name="logout_user"),   
 
     # To-Do
     path('todo/', views.todo, name='todo'),
