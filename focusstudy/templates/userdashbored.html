@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI + Focus Dashboard</title>
+  <title>📚 AI + Focus Study Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; }
-    header { background:#ff4b2b; color:#fff; padding:15px 25px; display:flex; justify-content:space-between; align-items:center; }
-    header h1 { font-size:22px; }
-    .nav-links { list-style:none; display:flex; gap:20px; margin:0; padding:0; }
-    .nav-links li a { color:#fff; text-decoration:none; font-weight:bold; transition:0.3s; }
-    .nav-links li a:hover { color:#000; background:#fff; padding:5px 10px; border-radius:10px; }
-    header button { background:#fff; color:#ff4b2b; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:bold; }
-    .container { display:grid; grid-template-columns: repeat(2,1fr); gap:20px; padding:20px; }
-    .card { background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition:0.3s; }
-    .card h2 { margin-bottom:10px; color:#ff4b2b; }
-    .profile { display:flex; align-items:center; gap:10px; }
-    .profile img { width:50px; border-radius:50%; }
-    .todo-list li { margin:5px 0; }
-    .badge { display:inline-block; background:#ff4b2b; color:#fff; padding:5px 12px; border-radius:12px; margin:3px 0; }
-    button.start-btn { background:#ff4b2b; color:#fff; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:10px; }
-    footer { text-align:center; padding:15px; margin-top:20px; background:#eee; }
-    .hidden { display:none; }
+   body { font-family:'Segoe UI',sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; }
+   header { background:#ff4b2b; color:#fff; padding:20px 30px; display:flex; justify-content:space-between; align-items:center; }
+   header h1 { font-size:26px; }
+   .nav-links { list-style:none; display:flex; gap:25px; margin:0; padding:0; }
+   .nav-links li a { color:#fff; text-decoration:none; font-weight:bold; transition:0.3s; }
+   .nav-links li a:hover { color:#000; background:#fff; padding:6px 12px; border-radius:12px; }
+   .container { display:grid; grid-template-columns:repeat(auto-fit,minmax(380px,1fr)); gap:25px; padding:30px; }
+   .card { background:#fff; padding:30px; border-radius:18px; box-shadow:0 6px 12px rgba(0,0,0,0.1); min-height:280px; }
+   .card h2 { margin-bottom:15px; color:#ff4b2b; font-size:20px; }
+   button { background:#ff4b2b; color:#fff; border:none; padding:12px 20px; border-radius:25px; cursor:pointer; margin:8px 0; font-weight:bold; font-size:15px; }
+   button:disabled { background:#aaa; cursor:not-allowed; }
+   input, select { padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; font-size:14px; width:100%; }
+   ul { list-style:none; padding:0; }
+   li { margin:8px 0; font-size:15px; }
+   .badge { display:inline-block; background:#ff4b2b; color:#fff; padding:8px 14px; border-radius:14px; margin:5px 5px 0 0; font-size:13px; }
+   .delete-btn { background:#999; font-size:13px; padding:5px 10px; margin-left:12px; border-radius:12px; cursor:pointer; }
+
   </style>
 </head>
 <body>
@@ -31,82 +31,110 @@
   <h1>📚 AI + Focus Study Dashboard</h1>
   <nav>
     <ul class="nav-links">
-      <li><a href="#">🏠 Dashboard</a></li>
-      <li><a href="#">📅 Schedule</a></li>
-      <li><a href="#">✅ Tasks</a></li>
-      <li><a href="#">📚 Resources</a></li>
+      <li><a href="/">🏠 Dashboard</a></li>
+      <li><a href="/timetable">📅 Schedule</a></li>
+      <li><a href="/todo">✅ Tasks</a></li>
+      <li><a href="/motivationbook">📚 Resources</a></li>
     </ul>
   </nav>
-  <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
 </header>
+
 <div class="container">
-<!-- User Profile -->
+
+  <!-- ================== User Profile Card ================== -->
   <div class="card profile-card">
     <h2>👤 User Profile</h2>
     <div class="profile">
       <img src="https://i.pravatar.cc/100" alt="User">
       <div>
-        {% if request.session.user_name %}
-          <h2>Welcome, {{ request.session.user_name }} 🎉</h2>
-          <p><b>Email:</b> {{ request.session.user_email }}</p>
-
-          <!-- Logout Button -->
-          <form action="{% url 'logout' %}" method="POST" style="margin-top:10px;">
-            {% csrf_token %}
-            <button class="start-btn" style="background:linear-gradient(135deg,#ff416c,#ff4b2b);border:none;border-radius:12px;color:white;cursor:pointer;padding:8px 15px;font-weight:bold;">
-              Logout
-            </button>
-          </form>
-
+        {% if user.is_authenticated %}
+          <h3>Welcome, {{ user.first_name }} 🎉</h3>
+          <p><b>Email:</b> {{ user.email }}</p>
+          <div style="margin-top:15px;">
+            <a href="{% url 'registartion' %}">
+              <button disabled style="background:#6c757d;cursor:not-allowed;opacity:0.6;">Registration</button>
+            </a>
+            <form action="{% url 'logout_user' %}" method="POST" style="display:inline;">
+              {% csrf_token %}
+              <button style="background:linear-gradient(135deg,#ff416c,#ff4b2b);">Logout</button>
+            </form>
+          </div>
         {% else %}
-          <h2>Welcome to your Dashboard</h2>
-          <p><a href="{% url 'registartion' %}">Please Register</a></p>
+          <h3>Welcome to your Dashboard</h3>
+          <p>Please register to continue.</p>
+          <div style="margin-top:15px;">
+            <a href="{% url 'registartion' %}">
+              <button style="background:#28a745;">Registration</button>
+            </a>
+            <button disabled style="background:#6c757d;cursor:not-allowed;opacity:0.6;">Logout</button>
+          </div>
         {% endif %}
       </div>
     </div>
   </div>
 
-  <!-- Quick Actions -->
+  <!-- ================== Study Timer ================== -->
+  <div class="card" id="studyTimerCard">
+    <h2>🎯 Study Timer</h2>
+    <label>Choose Subject:</label>
+    <select id="subjectSelect">
+      <option>Maths</option>
+      <option>Science</option>
+      <option>English</option>
+      <option>History</option>
+      <option>Computer</option>
+    </select><br><br>
+    <button onclick="startStudy()">▶ Start Study</button>
+    <button onclick="stopStudy()">⏹ Stop</button>
+    <p id="timerDisplay">⏳ Timer: 0h 0m 0s</p>
+  </div>
+
+  <!-- Study Log -->
   <div class="card">
-    <h2>⚡ Quick Actions</h2>
+    <h2>📖 Study Log</h2>
+    <ul id="studyLog"></ul>
+  </div>
+
+  <!-- Subject Time Chart -->
+  <div class="card">
+    <h2>📊 Subject Time Chart</h2>
+    <canvas id="studyChart"></canvas>
+  </div>
+
+  <!-- Pomodoro -->
+  <div class="card">
+    <h2>⏳ Pomodoro</h2>
     <p id="pomodoroStatus">No active Pomodoro</p>
-    <button class="start-btn" onclick="startPomodoro()">🎯 Start Pomodoro</button>
-  </div>
-
-  <!-- Pomodoro Activity Log -->
-  <div class="card">
-    <h2>📝 Pomodoro Activity</h2>
-    <ul id="pomodoroLog"></ul>
-  </div>
-
-  <!-- AI Suggestions -->
-  <div class="card">
-    <h2>🤖 AI Suggestions</h2>
-    <p id="aiTip">Focus on Maths for 2 hours today.</p>
+    <p>Set Timer: <input type="number" id="pomodoroTime" value="25"> min</p>
+    <button onclick="startPomodoro()">Start</button>
   </div>
 
   <!-- Today’s Tasks -->
   <div class="card">
-    <h2>📌 Today’s Tasks</h2>
-    <ul class="todo-list" id="taskList">
-      <li>✔️ Complete Chapter 5 (Maths)</li>
-      <li>✔️ Revise English Notes</li>
-      <li>❌ Physics Practice</li>
-    </ul>
+    <h2>✅ Today’s Tasks</h2>
+    <input type="text" id="taskInput" placeholder="Add a task...">
+    <button onclick="addTask()">➕ Add</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <!-- AI Suggestions -->
+  <div class="card">
+    <h2>🤖 AI Suggestion</h2>
+    <p id="aiTip">Click for a study tip 👇</p>
+    <button onclick="newTip()">✨ New Tip</button>
   </div>
 
   <!-- Gamification -->
   <div class="card">
     <h2>🏆 Gamification</h2>
     <p>XP Points: <span id="xp">120</span></p>
-    <p>Badges:</p>
     <span class="badge">Focus Master</span>
     <span class="badge">Early Bird</span>
   </div>
 
   <!-- Mood Tracker -->
   <div class="card">
-    <h2>💆 Wellness & Mood</h2>
+    <h2>💆 Mood</h2>
     <p>Current Mood: <span id="moodText">😊</span></p>
     <button onclick="setMood('😊')">😊</button>
     <button onclick="setMood('😐')">😐</button>
@@ -120,109 +148,215 @@
     <p><a href="#">📖 Motivational Books</a></p>
     <p><a href="#">🎧 Focus Music</a></p>
   </div>
+<!-- ===== Weekly Study Chart Card ===== -->
+<div class="card">
+  <h2>📅 Weekly Study Report</h2>
 
-  <!-- Settings -->
-  <div class="card">
-    <h2>⚙️ Settings</h2>
-    <p>Pomodoro Timer: <input type="number" id="pomodoroTime" value="25"> min</p>
-    <button class="start-btn" onclick="saveSettings()">Save Settings</button>
-  </div>
+  <!-- Chart Type Toggle -->
+  <label for="chartType">Chart Type:</label>
+  <select id="chartType" onchange="changeChartType()">
+    <option value="bar">Bar Chart</option>
+    <option value="line">Line Chart</option>
+  </select>
 
-  <!-- Weekly Comparison -->
-  <div class="card">
-    <h2>📅 Weekly Comparison</h2>
-    <canvas id="weeklyChart"></canvas>
-  </div>
-
+  <canvas id="weeklyChart" style="max-height:350px;margin-top:15px;"></canvas>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- ===== Professional Footer ===== -->
+ </div>
+<!-- ===== Professional Footer ===== -->
+<footer style="
+  background:#222; 
+  color:#ccc; 
+  padding:20px 15px; 
+  text-align:center; 
+  font-family: 'Segoe UI', sans-serif; 
+  font-size:14px;
+">
 
-<footer>
-  <p>© 2025 AI Focus Study App</p>
+  <!-- App Name -->
+  <p style="margin:5px 0; font-weight:bold; color:#fff;">
+    📚 AI Focus Study App
+  </p>
+
+  <!-- Social Links -->
+  <p style="margin:5px 0;">
+    Stay connected:
+    <a href="#" style="color:#ccc; margin:0 6px; text-decoration:none;">🌐</a>
+    <a href="#" style="color:#ccc; margin:0 6px; text-decoration:none;">🐦</a>
+    <a href="#" style="color:#ccc; margin:0 6px; text-decoration:none;">💼</a>
+    <a href="#" style="color:#ccc; margin:0 6px; text-decoration:none;">📸</a>
+  </p>
+
+  <!-- Copyright -->
+  <p style="margin:5px 0; color:#aaa;">
+    © 2025 AI Focus Study App | All Rights Reserved
+  </p>
+
+  <style>
+    footer a:hover { color:#fff; transition:0.3s; }
+  </style>
 </footer>
 
+
+
+
 <script>
-  // === USER SYSTEM ===
-  function loginUser(){
-    const name = document.getElementById("userName").value;
-    const email = document.getElementById("userEmail").value;
-    if(name && email){
-      localStorage.setItem("user", JSON.stringify({name, email}));
-      localStorage.setItem("pomodoroLog", JSON.stringify([])); // reset log
-      showUser();
-      loadPomodoroLog();
-    } else {
-      alert("Please enter both name and email");
+// ==== Study Timer with Log + Chart ====
+let startTime, currentSubject, timerInterval;
+let studyData = JSON.parse(localStorage.getItem("studyData")) || {};
+let chart;
+
+function startStudy(){
+  if(startTime) return; // already running
+  currentSubject=document.getElementById("subjectSelect").value;
+  startTime=Date.now();
+
+  // Show studying text
+  document.getElementById("timerDisplay").innerText=`Studying ${currentSubject}...`;
+
+  // Start live timer
+  timerInterval = setInterval(()=>{
+    let secs=Math.floor((Date.now()-startTime)/1000);
+    let h=Math.floor(secs/3600);
+    let m=Math.floor((secs%3600)/60);
+    let s=secs%60;
+    document.getElementById("timerDisplay").innerText=
+      `Studying ${currentSubject}... ⏳ ${h}h ${m}m ${s}s`;
+  },1000);
+}
+
+function stopStudy(){
+  if(!startTime) return alert("Start first!");
+  clearInterval(timerInterval); // stop live timer
+
+  let secs=Math.floor((Date.now()-startTime)/1000);
+  studyData[currentSubject]=(studyData[currentSubject]||0)+secs;
+  startTime=null;
+
+  document.getElementById("timerDisplay").innerText="Stopped.";
+  updateChart(); renderLog();
+  localStorage.setItem("studyData",JSON.stringify(studyData));
+}
+
+function renderLog(){
+  let log=document.getElementById("studyLog"); log.innerHTML="";
+  Object.entries(studyData).forEach(([sub,secs])=>{
+    let li=document.createElement("li");
+    li.innerHTML=`${sub}: ${(secs/3600).toFixed(2)} hrs 
+      <button class='delete-btn' onclick="delSubject('${sub}')">❌</button>`;
+    log.appendChild(li);
+  });
+}
+
+function delSubject(sub){
+  delete studyData[sub]; updateChart(); renderLog();
+  localStorage.setItem("studyData",JSON.stringify(studyData));
+}
+
+function updateChart(){
+  let ctx=document.getElementById("studyChart").getContext("2d");
+  if(chart) chart.destroy();
+  chart=new Chart(ctx,{
+    type:"bar",
+    data:{
+      labels:Object.keys(studyData),
+      datasets:[{
+        label:"Hours Studied",
+        data:Object.values(studyData).map(s=>s/3600),
+        backgroundColor:"#ff4b2b"
+      }]
     }
-  }
+  });
+}
 
-  function showUser(){
-    const user = JSON.parse(localStorage.getItem("user"));
-    if(user){
-      document.getElementById("loginSection").classList.add("hidden");
-      document.getElementById("userSection").classList.remove("hidden");
-      document.getElementById("welcomeMsg").innerText = "Welcome, " + user.name + " 🎉";
-      document.getElementById("userEmailText").innerText = user.email;
-    }
-  }
 
-  function logoutUser(){
-    localStorage.clear();
-    document.getElementById("loginSection").classList.remove("hidden");
-    document.getElementById("userSection").classList.add("hidden");
-    document.getElementById("pomodoroLog").innerHTML = "";
-    document.getElementById("pomodoroStatus").innerText = "No active Pomodoro";
-  }
-
-  // === Pomodoro Timer + Activity Log ===
+  // ==== Pomodoro ====
   let pomodoroTimer;
   function startPomodoro(){
-    let mins = parseInt(document.getElementById("pomodoroTime").value) || 25;
-    let seconds = mins * 60;
-    clearInterval(pomodoroTimer);
-
-    document.getElementById("pomodoroStatus").innerText = "Pomodoro running: " + mins + " min left ⏳";
-
-    pomodoroTimer = setInterval(()=>{
-      seconds--;
-      let m = Math.floor(seconds/60);
-      let s = seconds%60;
-      document.getElementById("pomodoroStatus").innerText = `Pomodoro running: ${m}m ${s}s left ⏳`;
-
-      if(seconds <= 0){
-        clearInterval(pomodoroTimer);
-        document.getElementById("pomodoroStatus").innerText = "✅ Pomodoro Completed!";
-        savePomodoroActivity(mins);
-      }
+    let mins=parseInt(document.getElementById("pomodoroTime").value)||25;
+    let secs=mins*60; clearInterval(pomodoroTimer);
+    pomodoroTimer=setInterval(()=>{
+      let m=Math.floor(secs/60), s=secs%60;
+      document.getElementById("pomodoroStatus").innerText=`Pomodoro: ${m}m ${s}s left`;
+      if(secs--<=0){ clearInterval(pomodoroTimer); document.getElementById("pomodoroStatus").innerText="✅ Pomodoro Done!"; }
     },1000);
   }
 
-  function savePomodoroActivity(duration){
-    let logs = JSON.parse(localStorage.getItem("pomodoroLog")) || [];
-    let now = new Date();
-    let time = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    logs.push(`Completed ${duration} min Pomodoro at ${time}`);
-    localStorage.setItem("pomodoroLog", JSON.stringify(logs));
-    loadPomodoroLog(); // 👈 तुरंत UI refresh
+  // ==== Tasks ====
+  let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+  function renderTasks(){ let list=document.getElementById("taskList"); list.innerHTML=""; tasks.forEach((t,i)=>{ let li=document.createElement("li"); li.innerHTML=`${t} <button class='delete-btn' onclick="delTask(${i})">❌</button>`; list.appendChild(li); }); localStorage.setItem("tasks",JSON.stringify(tasks)); }
+  function addTask(){ let val=document.getElementById("taskInput").value; if(val){ tasks.push(val); document.getElementById("taskInput").value=""; renderTasks(); } }
+  function delTask(i){ tasks.splice(i,1); renderTasks(); }
+
+  // ==== Mood ====
+  function setMood(m){ document.getElementById("moodText").innerText=m; }
+
+  // ==== AI Tips ====
+  const tips=["📌 Revise old topics before new ones.","💡 Take 5 min break after 25 min study.","✍️ Write notes, don’t just read.","🎧 Listen to focus music.","⏰ Study tough subjects in the morning."];
+  function newTip(){ document.getElementById("aiTip").innerText=tips[Math.floor(Math.random()*tips.length)]; }
+
+  // Init
+  renderLog(); updateChart(); renderTasks();
+    // ==== Weekly Data (localStorage me save hoga) ====
+  let weeklyData = JSON.parse(localStorage.getItem("weeklyData")) || {
+    Monday: 0, Tuesday: 0, Wednesday: 0,
+    Thursday: 0, Friday: 0, Saturday: 0
+  };
+  let weeklyChart;
+  let currentChartType = 'bar';
+
+  // === Save weekly study time ===
+  function saveWeeklyStudy(secs){
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let today = days[new Date().getDay()];
+    if(today !== "Sunday"){ // Only Mon-Sat
+      weeklyData[today] += secs;
+      localStorage.setItem("weeklyData", JSON.stringify(weeklyData));
+      updateWeeklyChart(); // Live update
+    }
   }
 
-  function loadPomodoroLog(){
-    let logs = JSON.parse(localStorage.getItem("pomodoroLog")) || [];
-    let logContainer = document.getElementById("pomodoroLog");
-    logContainer.innerHTML = "";
-    logs.forEach(l=>{
-      let li = document.createElement("li");
-      li.innerText = l;
-      logContainer.appendChild(li);
+  // === Chart Draw / Update ===
+  function updateWeeklyChart(){
+    const ctx = document.getElementById("weeklyChart").getContext("2d");
+    if(weeklyChart) weeklyChart.destroy();
+    weeklyChart = new Chart(ctx, {
+      type: currentChartType,
+      data: {
+        labels: Object.keys(weeklyData),
+        datasets: [{
+          label: "Hours Studied",
+          data: Object.values(weeklyData).map(s => (s/3600).toFixed(2)),
+          backgroundColor: currentChartType==='bar' ?
+            ["#ff4b2b","#ff6f61","#ff8a5c","#ffa947","#ffbf3f","#ffd633"] : "rgba(255,75,43,0.4)",
+          borderColor: "#ff4b2b",
+          borderWidth: 2,
+          fill: currentChartType==='line' ? true : false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        plugins:{
+          legend:{display:false},
+          title:{display:true,text:"Mon–Sat Study Hours",font:{size:18}}
+        },
+        scales:{
+          y:{beginAtZero:true,title:{display:true,text:"Hours"}}
+        }
+      }
     });
   }
 
-  // === PAGE LOAD पर सब restore होगा ===
-  window.onload = function(){
-    showUser();
-    loadPomodoroLog();
+  // === Change Chart Type Live ===
+  function changeChartType(){
+    currentChartType = document.getElementById("chartType").value;
+    updateWeeklyChart();
   }
+
+  // === On Page Load ===
+  window.addEventListener("load", updateWeeklyChart);
+
 </script>
-
-
 </body>
 </html>
