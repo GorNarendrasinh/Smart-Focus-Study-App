@@ -192,15 +192,67 @@
 
 
 
-<!-- Footer -->
-<footer>
-  <p>© 2025 SmartFocus. All Rights Reserved.</p>
-  <div class="links">
-    <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Support</a>
-    <a href="#">FAQ</a><a href="#">Feedback</a><a href="#">About</a>
-    <a href="#">Blog</a><a href="#">Contact</a><a href="#">Updates</a><a href="#">Settings</a>
+<!-- ===== Stylish Professional Footer ===== -->
+<footer style="
+  background: linear-gradient(135deg, #ff416c, black);
+  color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+">
+
+  <!-- App Name -->
+  <div style="font-size:20px; font-weight:bold; margin-bottom:15px;">
+    🤖 SmartFocus - AI Smart Study App
   </div>
+
+  <!-- Navigation / Links -->
+  <div style="margin-bottom:15px;">
+    <a href="#" style="color:#fff; margin:0 10px; text-decoration:none; transition:0.3s;">Privacy</a>
+    <a href="#" style="color:#fff; margin:0 10px; text-decoration:none; transition:0.3s;">Terms</a>
+    <a href="#" style="color:#fff; margin:0 10px; text-decoration:none; transition:0.3s;">Support</a>
+    <a href="#" style="color:#fff; margin:0 10px; text-decoration:none; transition:0.3s;">FAQ</a>
+    <a href="#" style="color:#fff; margin:0 10px; text-decoration:none; transition:0.3s;">Feedback</a>
+    <a href="#" style="color:#fff; margin:0 10px; text-decoration:none; transition:0.3s;">About</a>
+  </div>
+
+  <!-- Social / Contact -->
+  <div style="margin-bottom:15px; font-size:18px;">
+    Stay Connected:
+    <a href="#" style="color:#fff; margin:0 8px; transition:0.3s;">🌐</a>
+    <a href="#" style="color:#fff; margin:0 8px; transition:0.3s;">🐦</a>
+    <a href="#" style="color:#fff; margin:0 8px; transition:0.3s;">💼</a>
+    <a href="#" style="color:#fff; margin:0 8px; transition:0.3s;">📸</a>
+  </div>
+
+  <!-- Copyright -->
+  <div style="font-size:14px; opacity:0.85;">
+    © 2025 SmartFocus. All Rights Reserved.
+  </div>
+
+  <!-- Subtle animated background effect -->
+  <div style="
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    pointer-events:none;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    animation: float 8s linear infinite;
+  "></div>
+
+  <style>
+    footer a:hover { transform: scale(1.2); }
+    @keyframes float {
+      0% { background-position:0 0; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0 100%; }
+    }
+  </style>
+
 </footer>
+
 
 <script src="{% static 'index.js' %}"></script>
 </body>
