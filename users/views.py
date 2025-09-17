@@ -93,10 +93,16 @@ def pomodoro(request):
 def motivationbook(request):
     return render(request, "motivationbook.html")
 
-
 @login_required(login_url="/registartion/")
 def dashbored(request):
-    return render(request, "userdashbored.html")
+    return render(
+        request,
+        "userdashbored.html",
+        {
+            "user_name": request.user.first_name,  # jo registration me name diya tha
+            "user_email": request.user.email,      # email
+        },
+    )
 
 
 # -------------------------
