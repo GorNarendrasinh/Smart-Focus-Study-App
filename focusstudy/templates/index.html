@@ -18,14 +18,42 @@
   font-family: Arial;
 }
 #darkModeBtn{
-  display:block;
-  margin:20px auto;   /* center horizontally */
-  padding:10px 20px;
+  display:inline-flex;            /* better alignment */
+  align-items:center;            /* vertical center text */
+  justify-content:center;        /* horizontal center text */
+  
+  margin:20px auto;
+  padding:12px 22px;             /* FIX: proper spacing */
+  
   border:none;
-  border-radius:8px;
+  border-radius:10px;
+  
   background:#2575fc;
   color:#fff;
+  
+  font-size:14px;
+  font-weight:500;
+  line-height:1.2;               /* FIX: text not touching border */
+  
   cursor:pointer;
+  
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  transition:0.3s ease;
+}
+
+/* HOVER EFFECT */
+#darkModeBtn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.3);
+}
+
+/* MOBILE RESPONSIVE */
+@media(max-width:768px){
+  #darkModeBtn{
+    width:90%;                  /* full width on mobile */
+    font-size:13px;
+    padding:10px;
+  }
 }
 /* ===== NAVBAR (PRO UPGRADED) ===== */
 .navbar{
