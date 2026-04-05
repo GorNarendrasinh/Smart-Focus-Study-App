@@ -4,182 +4,301 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Notes Processor</title>
+
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    margin-top: -10px;
-   
+/* ===== GLOBAL ===== */
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 0;
+}
+
+/* ===== NAVBAR (FIXED RESPONSIVE) ===== */
+.navbar {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #3e95cd;
+  border-radius: 8px;
+  color: #fff;
+  margin-bottom: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.navbar .logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* links */
+.nav-links {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #ffd700;
+}
+
+/* hamburger icon */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* ===== MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+  .menu-toggle {
+    display: block;
   }
 
-.navbar { display:flex; justify-content:space-between;   align-items:center; padding:10px 20px; background-color:#3e95cd; border-radius:8px; color:#fff; margin-bottom: 10px; width:100%; }
-.navbar .logo { font-weight:bold; font-size:20px; }
-.navbar a { color:#fff; text-decoration:none; margin-left:15px; font-weight:500; }
-.navbar a:hover { color:#ffd700; }
+  .nav-links {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    margin-top: 10px;
+    background: #3e95cd;
+    border-radius: 8px;
 
+    /* IMPORTANT: content hide issue fix */
+    position: relative;
+  }
 
-
-
-  h1 {
-    color: #3e95cd;
-    margin-bottom: 15px;
+  .nav-links a {
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,0.2);
     text-align: center;
   }
-  .container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-  }
-  input[type=file] {
-    margin-bottom: 10px;
-  }
-  textarea {
-    width: 100%;
-    height: 150px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  #preview {
-    background: #f0f8ff;
-    padding: 10px;
-    border-radius: 8px;
-    min-height: 80px;
-    margin-bottom: 10px;
-    overflow-wrap: break-word;
-  }
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    background: #3e95cd;
-    color: #fff;
-    cursor: pointer;
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
-  button:hover {
-    background: #357ab8;
-  }
-  mark {
-    background: yellow;
-    color: black;
-  }
-  #my{color: black;
 
+  .nav-links.active {
+    display: flex;
   }
+}
+
+/* ===== CONTENT ===== */
+h1 {
+  color: #3e95cd;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+input[type=file] {
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+#preview {
+  background: #f0f8ff;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 80px;
+  margin-bottom: 10px;
+  overflow-wrap: break-word;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #3e95cd;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+button:hover {
+  background: #357ab8;
+}
+
+mark {
+  background: yellow;
+  color: black;
+}
+
+#my {
+  color: black;
+}
 </style>
 </head>
+
 <body>
 
+<!-- ===== NAVBAR ===== -->
 <div class="navbar">
   <div class="logo">SmartFocus</div>
-  <div>
- <a href="/">Dashboard</a>
+
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+  <div class="nav-links" id="navLinks">
+    <a href="/">Dashboard</a>
     <a href="/timetable">Schedule</a>
     <a href="/pomodoro">Pomodoro</a>
     <a href="/todo">Todo</a>
     <a href="/motivationbook">Ai+books</a>
   </div>
 </div>
+
 <h1>AI Notes Processor</h1>
 
 <div class="container">
-    <h1 id="my">Upload File (PFD)</h1>
+  <h1 id="my">Upload File (PDF)</h1>
+
   <input type="file" id="pdfUpload" accept=".pdf"><br>
+
   <button onclick="processPDF()">Process PDF</button>
   <button onclick="generatePDF()">Download PDF</button>
 
   <h3>Editable Summary / Keywords:</h3>
-  <textarea id="notesArea" placeholder="AI summary and keywords appear here..."></textarea>
+  <textarea id="notesArea"></textarea>
 
   <h3>Preview (keywords highlighted):</h3>
   <div id="preview"></div>
 </div>
 
+<!-- PDF LIB -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
 <script>
-  let extractedText = '';
+let extractedText = "";
 
-  function processPDF() {
-    const file = document.getElementById('pdfUpload').files[0];
-    if (!file) { alert("Select a PDF first!"); return; }
+/* ===== NAV TOGGLE FIX ===== */
+function toggleMenu() {
+  document.getElementById("navLinks").classList.toggle("active");
+}
 
-    const reader = new FileReader();
-    reader.onload = async function() {
-      const typedarray = new Uint8Array(this.result);
-      const pdf = await pdfjsLib.getDocument(typedarray).promise;
-      let fullText = '';
-      for(let i=1; i<=pdf.numPages; i++){
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const pageText = content.items.map(item => item.str).join(' ');
-        fullText += pageText + '\n\n';
+/* ===== PDF PROCESS ===== */
+async function processPDF() {
+  const file = document.getElementById('pdfUpload').files[0];
+  if (!file) return alert("Select a PDF first!");
+
+  const reader = new FileReader();
+
+  reader.onload = async function () {
+    const typedarray = new Uint8Array(this.result);
+    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+
+    let fullText = "";
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      fullText += content.items.map(item => item.str).join(" ") + "\n";
+    }
+
+    extractedText = fullText;
+
+    let summary = extractedText.split(".").slice(0, 5).join(". ") + ".";
+
+    let words = extractedText.match(/\b\w+\b/g) || [];
+    let freq = {};
+
+    words.forEach(w => {
+      w = w.toLowerCase();
+      if (!["the","and","of","to","a","in","is","for"].includes(w)) {
+        freq[w] = (freq[w] || 0) + 1;
       }
-      extractedText = fullText;
-
-      // Simple AI Processing: summarize and extract keywords
-      let summary = extractedText.split('.').slice(0, 5).join('. ') + '.';
-      let words = extractedText.match(/\b\w+\b/g);
-      let freq = {};
-      words.forEach(w => { w = w.toLowerCase(); if(!['the','and','of','to','a','in','is','for'].includes(w)) freq[w]=(freq[w]||0)+1; });
-      let keywords = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]).slice(0,10).join(', ');
-
-      const notesArea = document.getElementById('notesArea');
-      notesArea.value = summary + "\n\nKeywords: " + keywords;
-
-      updatePreview();
-    }
-    reader.readAsArrayBuffer(file);
-  }
-
-  function updatePreview() {
-    const notes = document.getElementById('notesArea').value;
-    const preview = document.getElementById('preview');
-    let keywords = notes.split('Keywords:')[1];
-    let text = notes.split('Keywords:')[0];
-
-    if(keywords){
-      keywords = keywords.split(',').map(k=>k.trim()).filter(k=>k);
-      keywords.forEach(k => {
-        let regex = new RegExp(`\\b${k}\\b`, 'gi');
-        text = text.replace(regex, match => `<mark>${match}</mark>`);
-      });
-    }
-
-    preview.innerHTML = text;
-  }
-
-  document.getElementById('notesArea').addEventListener('input', updatePreview);
-
-  async function generatePDF() {
-    const pdfDoc = await PDFLib.PDFDocument.create();
-    const page = pdfDoc.addPage([600,800]);
-    const text = document.getElementById('notesArea').value;
-    const lines = text.split('\n');
-    let y = 750;
-    lines.forEach(line=>{
-      page.drawText(line, { x: 50, y: y, size: 12, maxWidth: 500 });
-      y -= 18;
     });
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], {type:'application/pdf'});
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'Processed_Notes.pdf';
-    link.click();
+
+    let keywords = Object.keys(freq)
+      .sort((a,b)=>freq[b]-freq[a])
+      .slice(0,10)
+      .join(", ");
+
+    document.getElementById("notesArea").value =
+      summary + "\n\nKeywords: " + keywords;
+
+    updatePreview();
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+/* ===== PREVIEW ===== */
+function updatePreview() {
+  const notes = document.getElementById("notesArea").value;
+  const preview = document.getElementById("preview");
+
+  let text = notes.split("Keywords:")[0];
+  let keywords = notes.split("Keywords:")[1];
+
+  if (keywords) {
+    keywords.split(",").forEach(k => {
+      k = k.trim();
+      if (k) {
+        let regex = new RegExp("\\b" + k + "\\b", "gi");
+        text = text.replace(regex, m => `<mark>${m}</mark>`);
+      }
+    });
   }
+
+  preview.innerHTML = text;
+}
+
+document.getElementById("notesArea")
+.addEventListener("input", updatePreview);
+
+/* ===== DOWNLOAD PDF ===== */
+async function generatePDF() {
+  const pdfDoc = await PDFLib.PDFDocument.create();
+  const page = pdfDoc.addPage([600, 800]);
+
+  const text = document.getElementById("notesArea").value;
+  const lines = text.split("\n");
+
+  let y = 750;
+
+  lines.forEach(line => {
+    page.drawText(line, { x: 50, y, size: 12 });
+    y -= 18;
+  });
+
+  const bytes = await pdfDoc.save();
+  const blob = new Blob([bytes], { type: "application/pdf" });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Processed_Notes.pdf";
+  link.click();
+}
 </script>
 
 </body>
