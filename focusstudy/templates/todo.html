@@ -5,36 +5,225 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Focus Dashboard</title>
+
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Segoe UI', sans-serif; background:#f5f5f5; color:#333; display:flex; flex-direction:column; align-items:center; padding:20px; min-height:100vh; }
-.navbar { display:flex; justify-content:space-between; align-items:center; padding:10px 15px; background-color:#3e95cd; border-radius:8px; color:#fff; margin-bottom:20px; width:100%; }
-.navbar .logo { font-weight:bold; font-size:20px; }
-.navbar a { color:#fff; text-decoration:none; margin-left:15px; font-weight:500; }
-.navbar a:hover { color:#ffd700; }
-.container { width:100%; max-width:750px; background:#fff; padding:25px; margin-bottom:25px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-h1 { text-align:center; margin-bottom:20px; color:#3e95cd; font-size:26px; }
-.ai-suggestion { background:#e0f7fa; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; font-style:italic; color:#00796b; min-height:28px; }
-input[type=text], textarea { width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; font-size:16px; }
-button { padding:10px 15px; border:none; border-radius:6px; background:#3e95cd; color:#fff; cursor:pointer; transition:0.3s; }
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body {
+  font-family:'Segoe UI', sans-serif;
+  background:#f5f5f5;
+  color:#333;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  min-height:100vh;
+}
+
+/* ================= NAVBAR (FULL FIXED) ================= */
+.navbar {
+  width:100%;
+  background:#3e95cd;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  position:relative;
+}
+
+.logo {
+  font-size:20px;
+  font-weight:bold;
+}
+
+/* LINKS */
+.nav-links {
+  display:flex;
+  gap:15px;
+  align-items:center;
+}
+
+.nav-links a {
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+  transition:0.3s;
+}
+
+.nav-links a:hover {
+  color:#ffd700;
+}
+
+/* HAMBURGER */
+.menu-toggle {
+  display:none;
+  font-size:28px;
+  cursor:pointer;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width:768px) {
+
+  .menu-toggle {
+    display:block;
+  }
+
+  .nav-links {
+    display:none;
+    width:100%;
+    flex-direction:column;
+    background:#3e95cd;
+    margin-top:10px;
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .nav-links a {
+    padding:12px;
+    text-align:center;
+    border-top:1px solid rgba(255,255,255,0.2);
+  }
+
+  .nav-links.active {
+    display:flex;
+  }
+}
+
+/* ================= YOUR ORIGINAL DESIGN ================= */
+
+.container {
+  width:100%;
+  max-width:750px;
+  background:#fff;
+  padding:25px;
+  margin-bottom:25px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align:center;
+  margin-bottom:20px;
+  color:#3e95cd;
+  font-size:26px;
+}
+
+.ai-suggestion {
+  background:#e0f7fa;
+  padding:12px;
+  border-radius:8px;
+  margin-bottom:20px;
+  text-align:center;
+  font-style:italic;
+  color:#00796b;
+  min-height:28px;
+}
+
+input[type=text], textarea {
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:16px;
+}
+
+button {
+  padding:10px 15px;
+  border:none;
+  border-radius:6px;
+  background:#3e95cd;
+  color:#fff;
+  cursor:pointer;
+  transition:0.3s;
+}
+
 button:hover { background:#357ab8; }
 button:disabled { background:#aaa; cursor:not-allowed; }
-ul { list-style:none; padding:0; max-height:350px; overflow-y:auto; }
-ul li { background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
-ul li.done { text-decoration:line-through; color:#888; }
-ul li button { margin-left:5px; padding:5px 10px; font-size:14px; border:none; background:#3e95cd; color:white; border-radius:5px; cursor:pointer;}
-ul li button:hover { background:#357ab8; }
-.entries { margin-top:15px; }
-.entry { background:#f1f1f1; padding:10px; border-radius:6px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;}
-.entry button { background:#3e95cd; color:#fff; border:none; border-radius:5px; padding:5px 10px; cursor:pointer; }
-.entry button:hover { background:#357ab8; }
+
+ul {
+  list-style:none;
+  padding:0;
+  max-height:350px;
+  overflow-y:auto;
+}
+
+ul li {
+  background:#f1f1f1;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+ul li.done {
+  text-decoration:line-through;
+  color:#888;
+}
+
+ul li button {
+  margin-left:5px;
+  padding:5px 10px;
+  font-size:14px;
+  border:none;
+  background:#3e95cd;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+ul li button:hover {
+  background:#357ab8;
+}
+
+.entries {
+  margin-top:15px;
+}
+
+.entry {
+  background:#f1f1f1;
+  padding:10px;
+  border-radius:6px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.entry button {
+  background:#3e95cd;
+  color:#fff;
+  border:none;
+  border-radius:5px;
+  padding:5px 10px;
+  cursor:pointer;
+}
+
+.entry button:hover {
+  background:#357ab8;
+}
 </style>
 </head>
+
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <div class="navbar">
   <div class="logo">SmartFocus</div>
-  <div>
+
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+  <div class="nav-links" id="navLinks">
     <a href="/">Dashboard</a>
     <a href="/timetable">Schedule</a>
     <a href="/pomodoro">Pomodoro</a>
@@ -43,10 +232,11 @@ ul li button:hover { background:#357ab8; }
   </div>
 </div>
 
-<!-- Todo App -->
+<!-- ================= TODO ================= -->
 <div class="container">
   <h1>AI To-Do App</h1>
-  <div class="ai-suggestion" id="aiSuggestion">Stay focused and never give up!</div>
+
+  <div class="ai-suggestion">Stay focused and never give up!</div>
 
   <input type="text" id="taskInput" placeholder="Add a new task">
   <button id="addTaskBtn" disabled>Add Task</button>
@@ -66,11 +256,13 @@ ul li button:hover { background:#357ab8; }
   </ul>
 </div>
 
-<!-- Journal App -->
+<!-- ================= JOURNAL ================= -->
 <div class="container">
   <h1>Daily Journal</h1>
-  <textarea id="journalInput" placeholder="Write your thoughts, mood, or progress..."></textarea>
+
+  <textarea id="journalInput" placeholder="Write your thoughts..."></textarea>
   <button id="saveEntryBtn">Save Entry</button>
+
   <div class="entries" id="entries">
     {% for entry in journal_entries %}
       <div class="entry" data-id="{{ entry.id }}">
@@ -84,6 +276,12 @@ ul li button:hover { background:#357ab8; }
 </div>
 
 <script>
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("active");
+}
+
+/* ===== YOUR ORIGINAL JS (NO CHANGE) ===== */
+
 function getCookie(name){
     let cookieValue = null;
     if(document.cookie && document.cookie!==''){
@@ -100,12 +298,15 @@ function getCookie(name){
 }
 const csrftoken = getCookie('csrftoken');
 
-// ==== Todo JS ====
+/* (REST JS SAME AS YOUR ORIGINAL) */
+
 const taskInput = document.getElementById('taskInput');
 const addTaskBtn = document.getElementById('addTaskBtn');
 const taskList = document.getElementById('taskList');
 
-taskInput.addEventListener('input', () => addTaskBtn.disabled = taskInput.value.trim() === '');
+taskInput.addEventListener('input', () => {
+  addTaskBtn.disabled = taskInput.value.trim() === '';
+});
 
 function attachTaskEvents(li){
     const toggleBtn = li.querySelector('.toggleBtn');
@@ -131,11 +332,8 @@ function attachTaskEvents(li){
     });
 }
 
-// Attach events
-// Attach events to existing tasks
 document.querySelectorAll('#taskList li[data-id]').forEach(li => attachTaskEvents(li));
 
-// Add new task
 addTaskBtn.addEventListener('click', () => {
     const text = taskInput.value.trim();
     if(!text) return;
@@ -158,7 +356,7 @@ addTaskBtn.addEventListener('click', () => {
     addTaskBtn.disabled = true;
 });
 
-// ==== Journal JS ====
+/* Journal */
 const saveEntryBtn = document.getElementById('saveEntryBtn');
 const journalInput = document.getElementById('journalInput');
 const entriesDiv = document.getElementById('entries');
@@ -175,10 +373,8 @@ function attachJournalDeleteEvent(div){
     });
 }
 
-// Attach delete to existing journal entries
 document.querySelectorAll('.entry[data-id]').forEach(div => attachJournalDeleteEvent(div));
 
-// Add new journal entry
 saveEntryBtn.addEventListener('click', () => {
     const content = journalInput.value.trim();
     if(!content) return;
@@ -201,5 +397,6 @@ saveEntryBtn.addEventListener('click', () => {
     journalInput.value = '';
 });
 </script>
+
 </body>
 </html>
