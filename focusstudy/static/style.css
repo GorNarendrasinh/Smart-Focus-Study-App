@@ -1,3 +1,4 @@
+/* ================= RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -10,9 +11,9 @@ body {
     color: #333;
     line-height: 1.5;
     transition: 0.3s;
-
 }
 
+/* ================= DARK MODE ================= */
 body.dark {
     background: #121212;
     color: #fff;
@@ -22,6 +23,7 @@ body.dark .navbar {
     background: #1f1f1f;
 }
 
+/* dark support cards */
 body.dark .quote-section,
 body.dark .tracker-section div,
 body.dark .goal-streak,
@@ -32,191 +34,183 @@ body.dark .ai-section {
     color: #fff;
 }
 
-/* ===== Navbar ===== */
+/* ================= NAVBAR ================= */
 .navbar {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* logo left, menu right */
-    padding: 10px 20px;
-  /* gradient navbar */
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #333;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-/* Common button style */
-.nav-buttons {
-  display: flex;
-  gap: 15px;
-  margin: 20px 0;
+    position: relative;
+    z-index: 1000;
 }
 
-.btn {
-  text-decoration: none;
-  padding: 12px 22px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+/* ================= LOGO ================= */
+.navbar .logo img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
 }
 
-/* Dashboard button */
-.btn-dashboard {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: white;
-}
-.btn-dashboard:hover {
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  transform: translateY(-3px);
-}
-
-/* Register button */
-.btn-register {
-  background: linear-gradient(135deg, #43e97b, #38f9d7);
-  color: white;
-}
-.btn-register:hover {
-  background: linear-gradient(135deg, #00c853, #00e676);
-  transform: translateY(-3px);
-}
-
-/* Logout button */
-.btn-logout {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  color: white;
-}
-.btn-logout:hover {
-  background: linear-gradient(135deg, #e53935, #d32f2f);
-  transform: translateY(-3px);
-}
-/* 
-
-===== Navbar Styling ===== */
 .logo1 {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     color: #fff;
     position: absolute;
     left: 170px;
-    transition: all 0.3s ease-in-out;
+    transition: 0.3s;
 }
 
 .logo1:hover {
     color: #ff7a64;
-    font-size: 40px;
-    filter: drop-shadow(0 0 10px #ff7a64);
+    transform: scale(1.05);
     cursor: pointer;
 }
-.navbar {
-  width: 100%;
-  background-color: #333; /* example background */
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  position: static; /* ensures it is static (default) */
-  top: 0; /* only matters if position is fixed/sticky */
-}
 
-.navbar .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #ff4b2b;
-}
-
-/* Navigation Links */
+/* ================= NAV LINKS ================= */
 .nav-links {
     display: flex;
     gap: 15px;
+    align-items: center;
 }
 
 .nav-links a {
-  color: white;
-  margin: 0 10px;
-  text-decoration: none;
+    color: white;
+    text-decoration: none;
+    position: relative;
+    padding: 6px 10px;
+    font-size: 15px;
+    transition: 0.3s;
 }
 
-/* Hover / Focus effect for text */
-.nav-links a:hover,
-.nav-links a:focus {
-    color: yellow;
-}
-
-/* Underline base (hidden) */
+/* underline animation */
 .nav-links a::after {
     content: '';
     position: absolute;
-    width: 0;             /* start from 0 */
+    left: 0;
+    bottom: 0;
+    width: 0;
     height: 2px;
     background: yellow;
-    left: 0;              /* starting point */
-    bottom: 0;
-    transition: width 0.4s ease; /* smooth appear/disappear */
+    transition: width 0.3s ease;
 }
 
-/* Expand underline on hover/focus */
-.nav-links a:hover::after,
-.nav-links a:focus::after {
-    width: 100%; /* full width */
+.nav-links a:hover::after {
+    width: 100%;
 }
 
-/* Navbar Buttons */
+.nav-links a:hover {
+    color: yellow;
+}
+
+/* ================= BUTTONS ================= */
 .nav-buttons {
     display: flex;
     gap: 12px;
+    align-items: center;
 }
 
-.nav-buttons a {
-    padding: 8px 16px;
-    border-radius: 25px;
+.btn {
+    padding: 10px 16px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: bold;
+    border-radius: 10px;
     text-decoration: none;
-    background: #ff4b2b;
-    color: #fff;
-    transition: background 0.3s, transform 0.3s;
+    transition: 0.3s;
+    display: inline-block;
 }
 
-.nav-buttons a:hover {
-    background: #e84320;
-    transform: scale(1.05);
+/* buttons */
+.btn-dashboard {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
 }
 
+.btn-register {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: white;
+}
 
-  .btn-dashboard {
-    background: #ff4b2b;
-    color: #fff;
-  }
+.btn-logout {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: white;
+}
 
-  .btn-dashboard:hover {
-    background: #ff6a4d;
-  }
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
 
-  .btn-register {
-    background: #fff;
-    color: #222;
-    border: 2px solid #ff4b2b;
-  }
-
-  .btn-register:hover {
-    background: #ff4b2b;
-    color: #fff;
-  }
-
-  .toggleBtn {
+/* ================= HAMBURGER ================= */
+.toggleBtn {
     display: none;
-    font-size: 22px;
+    font-size: 30px;
     cursor: pointer;
-  }
+    color: white;
+    z-index: 1100;
+}
 
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .toggleBtn { display: block; }
-  }
-/* Toggle button for mobile */
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
 
+    .toggleBtn {
+        display: block;
+    }
 
+    /* MOBILE MENU FIX (IMPORTANT) */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100vh;
+        background: #111;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+        transition: 0.35s ease-in-out;
+        z-index: 999;
+    }
 
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-links a {
+        font-size: 20px;
+        padding: 12px;
+    }
+
+    /* hide desktop buttons */
+    .nav-buttons {
+        display: none;
+    }
+
+    /* logo fix */
+    .logo1 {
+        position: static;
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+    }
+}
+
+/* ================= SMALL MOBILE ================= */
+@media (max-width: 480px) {
+    .logo1 {
+        font-size: 18px;
+    }
+
+    .toggleBtn {
+        font-size: 26px;
+    }
+}
 /* ===== Container ===== */
 .container {
     max-width: 1200px;
@@ -358,33 +352,7 @@ max-width: 140px;
    margin-left: 25rem;
 }
 
-/* ===== Footer ===== */
-footer {
-    background: #3e95cd;
-    color: #fff;
-    padding: 20px;
-    margin-top: 30px;
-    text-align: center;
-}
 
-footer a {
-    color: #ffd700;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 0.9rem;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-footer .links {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
   /* new feature added */
 h2 { color:#ff4b2b; text-align:center; margin-bottom:15px; }
 .feature-card { background:#fff; padding:20px; border-radius:15px; box-shadow:0 6px 12px rgba(0,0,0,0.1); margin-bottom:25px; width:90%; max-width:500px; }
