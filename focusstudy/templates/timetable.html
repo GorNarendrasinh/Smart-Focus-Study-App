@@ -5,47 +5,149 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Time Table - Task Manager</title>
-<style>
-  body { font-family:'Segoe UI', sans-serif; background:#f5f7fa; display:flex; justify-content:center; padding:20px; }
-  .container { max-width:900px; width:100%; background:#fff; border-radius:12px; padding:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
-  .navbar { display:flex; justify-content:space-between; align-items:center; padding:10px 15px; background-color:#3e95cd; border-radius:8px; color:#fff; margin-bottom:20px; }
-  .navbar .logo { font-weight:bold; font-size:20px; }
-  .navbar a { color:#fff; text-decoration:none; margin-left:15px; font-weight:500; }
-  .navbar a:hover { color:#ffd700; }
-  h1 { text-align:center; color:#3e95cd; margin-bottom:20px; }
-  table { width:100%; border-collapse:collapse; margin-bottom:30px; }
-  th, td { padding:12px; border:1px solid #ccc; text-align:center; font-size:16px; }
-  th { background:#3e95cd; color:#fff; }
-  tr:nth-child(even) { background:#f1f7fc; }
-  tr:hover { background:#e0f7fa; }
 
-  /* Task Manager */
-  .task-manager { margin-top:30px; background:#f0f8ff; padding:15px; border-radius:8px; }
-  .task-manager h2 { color:#3e95cd; margin-bottom:10px; }
-  .task-manager input { width:70%; padding:8px; border-radius:5px; border:1px solid #ccc; margin-right:5px; }
-  .task-manager button { padding:8px 12px; border:none; background:#3e95cd; color:#fff; border-radius:5px; cursor:pointer; }
-  .task-manager button:disabled { background:#999; cursor:not-allowed; }
-  .task-manager ul { list-style:none; padding-left:0; margin-top:15px; }
-  .task-manager li { padding:10px; border-bottom:1px solid #ccc; display:flex; justify-content:space-between; align-items:center; }
-  .task-manager li.completed span { text-decoration:line-through; color:#555; }
-  .task-manager button.complete-btn { background:#28a745; margin-right:5px; }
-  .task-manager button.delete-btn { background:#dc3545; }
+<style>
+body {
+  font-family:'Segoe UI', sans-serif;
+  background:#f5f7fa;
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+.container {
+  max-width:900px;
+  width:100%;
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ===== NAVBAR FIX ===== */
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 15px;
+  background-color:#3e95cd;
+  border-radius:8px;
+  color:#fff;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+  position:relative;
+}
+
+.navbar .logo {
+  font-weight:bold;
+  font-size:20px;
+}
+
+/* links */
+.nav-links {
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.navbar a {
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+}
+
+.navbar a:hover {
+  color:#ffd700;
+}
+
+/* hamburger icon */
+.menu-toggle {
+  display:none;
+  font-size:28px;
+  cursor:pointer;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width:768px) {
+
+  .menu-toggle {
+    display:block;
+  }
+
+  .nav-links {
+    width:100%;
+    display:none;
+    flex-direction:column;
+    margin-top:10px;
+    background:#3e95cd;
+    border-radius:8px;
+    position:relative; /* IMPORTANT: no content overlap */
+  }
+
+  .nav-links a {
+    padding:12px;
+    border-top:1px solid rgba(255,255,255,0.2);
+    text-align:center;
+  }
+
+  .nav-links.active {
+    display:flex;
+  }
+}
+
+/* ===== TABLE + TASK (UNCHANGED) ===== */
+h1 { text-align:center; color:#3e95cd; margin-bottom:20px; }
+
+table { width:100%; border-collapse:collapse; margin-bottom:30px; }
+th, td { padding:12px; border:1px solid #ccc; text-align:center; font-size:16px; }
+th { background:#3e95cd; color:#fff; }
+tr:nth-child(even) { background:#f1f7fc; }
+tr:hover { background:#e0f7fa; }
+
+.task-manager { margin-top:30px; background:#f0f8ff; padding:15px; border-radius:8px; }
+.task-manager h2 { color:#3e95cd; margin-bottom:10px; }
+.task-manager input { width:70%; padding:8px; border-radius:5px; border:1px solid #ccc; margin-right:5px; }
+.task-manager button { padding:8px 12px; border:none; background:#3e95cd; color:#fff; border-radius:5px; cursor:pointer; }
+.task-manager ul { list-style:none; padding-left:0; margin-top:15px; }
+.task-manager li { padding:10px; border-bottom:1px solid #ccc; display:flex; justify-content:space-between; align-items:center; }
+.task-manager li.completed span { text-decoration:line-through; color:#555; }
+.task-manager button.complete-btn { background:#28a745; margin-right:5px; }
+.task-manager button.delete-btn { background:#dc3545; }
 </style>
 </head>
-<body>
-<div class="container">
-    <div class="navbar">
-        <div class="logo">SmartFocus - Timetable</div>
-        <div>
-        <a href="/">Dashboard</a>
-    <a href="/todo">Todo</a>
-    <a href="/pomodoro">Pomodoro</a>
-    <a href="/notes">Notes-Analytics</a>
-    <a href="/motivationbook">Ai+books</a>
-        </div>
-    </div>
 
-    <!-- Sample Time Table -->
+<body>
+
+<div class="container">
+
+  <!-- ===== NAVBAR ===== -->
+  <div class="navbar">
+    <div class="logo">SmartFocus - Timetable</div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="/">Dashboard</a>
+      <a href="/todo">Todo</a>
+      <a href="/pomodoro">Pomodoro</a>
+      <a href="/notes">Notes-Analytics</a>
+      <a href="/motivationbook">Ai+books</a>
+    </div>
+  </div>
+
+  <h1>Time Table</h1>
+
+  <!-- TABLE -->
+  <
+
+
+
+
+
+
+
+
+   <!-- Sample Time Table -->
     <!-- Sample Time Table with Checkbox in Tips -->
     <table>
       <thead>
@@ -77,28 +179,35 @@
 
 
 
-    <!-- Task Manager -->
-    <div class="task-manager">
-      <h2>Ai Task Management</h2>
-      <input type="text" id="taskInput" placeholder="Enter new task">
-      <button id="addTaskBtn" disabled>Add Task</button>
-      <ul id="taskList">
-        {% for task in tasks %}
-          <li data-id="{{ task.id }}" class="{% if task.completed %}completed{% endif %}">
-            <span>{{ task.text }}</span>
-            <div>
-              <button class="complete-btn">{% if task.completed %}Undo{% else %}Done{% endif %}</button>
-              <button class="delete-btn">Delete</button>
-            </div>
-          </li>
-        {% empty %}
-          <li>No tasks yet.</li>
-        {% endfor %}
-      </ul>
-    </div>
+  <!-- TASK MANAGER -->
+  <div class="task-manager">
+    <h2>Ai Task Management</h2>
+    <input type="text" id="taskInput" placeholder="Enter new task">
+    <button id="addTaskBtn" disabled>Add Task</button>
+    <ul id="taskList">
+      {% for task in tasks %}
+        <li data-id="{{ task.id }}" class="{% if task.completed %}completed{% endif %}">
+          <span>{{ task.text }}</span>
+          <div>
+            <button class="complete-btn">{% if task.completed %}Undo{% else %}Done{% endif %}</button>
+            <button class="delete-btn">Delete</button>
+          </div>
+        </li>
+      {% empty %}
+        <li>No tasks yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
 </div>
 
 <script>
+/* ===== NAV TOGGLE FIX ===== */
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("active");
+}
+
+/* ===== TASK JS (UNCHANGED) ===== */
 function getCookie(name){
     let cookieValue = null;
     if(document.cookie && document.cookie!==''){
@@ -117,12 +226,12 @@ const taskInput = document.getElementById('taskInput');
 const addTaskBtn = document.getElementById('addTaskBtn');
 const taskList = document.getElementById('taskList');
 
-taskInput.addEventListener('input', ()=>{ addTaskBtn.disabled = taskInput.value.trim() === ''; });
+taskInput.addEventListener('input', ()=>{ 
+  addTaskBtn.disabled = taskInput.value.trim() === ''; 
+});
 
-// Attach events to existing tasks
 document.querySelectorAll('#taskList li[data-id]').forEach(li => attachTaskEvents(li));
 
-// Add new task
 addTaskBtn.addEventListener('click', ()=>{
     const text = taskInput.value.trim();
     if(!text) return;
@@ -135,10 +244,10 @@ addTaskBtn.addEventListener('click', ()=>{
         const li=document.createElement('li');
         li.dataset.id=task.id;
         li.innerHTML=`<span>${task.text}</span>
-                      <div>
-                        <button class="complete-btn">Done</button>
-                        <button class="delete-btn">Delete</button>
-                      </div>`;
+        <div>
+          <button class="complete-btn">Done</button>
+          <button class="delete-btn">Delete</button>
+        </div>`;
         taskList.prepend(li);
         attachTaskEvents(li);
     });
@@ -172,5 +281,6 @@ function attachTaskEvents(li){
     });
 }
 </script>
+
 </body>
 </html>
