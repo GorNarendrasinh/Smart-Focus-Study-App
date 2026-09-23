@@ -1,145 +1,577 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <title>Create Account</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8faff);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            padding: 25px;
         }
 
-        .registration-form {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        .register-wrapper {
             width: 100%;
-            max-width: 400px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 1050px;
+            min-height: 650px;
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 45% 55%;
+            box-shadow: 0 25px 70px rgba(31, 41, 55, 0.15);
         }
 
-        .registration-form:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
-        }
+        /* LEFT SIDE */
 
-        .registration-form h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .registration-form .input-group {
+        .register-left {
             position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(79, 70, 229, 0.95),
+                    rgba(124, 58, 237, 0.92)
+                ),
+                url("{% static 'images/register-bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .register-left::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            top: -80px;
+            right: -80px;
+        }
+
+        .register-left::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.07);
+            bottom: -80px;
+            left: -70px;
+        }
+
+        .left-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 65px;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand span {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+
+        .register-left h1 {
+            font-size: 42px;
+            line-height: 1.15;
+            font-weight: 800;
             margin-bottom: 20px;
         }
 
-        .registration-form input {
+        .register-left h1 span {
+            color: #ddd6fe;
+        }
+
+        .register-left .description {
+            color: rgba(255,255,255,0.82);
+            font-size: 15px;
+            line-height: 1.8;
+            max-width: 390px;
+        }
+
+        .features {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.92);
+        }
+
+        .feature-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        /* RIGHT SIDE */
+
+        .register-right {
+            padding: 55px 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
+            max-width: 440px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 31px;
+            color: #111827;
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .messages {
+            margin-bottom: 18px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #fef2f2;
+            color: #dc2626;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            width: 100%;
+            height: 52px;
+            padding: 0 15px 0 44px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             outline: none;
-            transition: 0.3s;
+            background: #f9fafb;
+            color: #111827;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all .25s ease;
         }
 
-        .registration-form input:focus {
-            border-color: #007BFF;
-            box-shadow: 0 0 8px rgba(0,123,255,0.2);
+        .input-group input::placeholder {
+            color: #9ca3af;
         }
 
-        .registration-form button {
+        .input-group input:focus {
+            background: #ffffff;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,.10);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .register-btn {
             width: 100%;
-            padding: 12px;
-            background: #007BFF;
+            height: 54px;
+            margin-top: 7px;
             border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 500;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.3s;
+            box-shadow: 0 12px 25px rgba(79,70,229,.23);
+            transition: all .25s ease;
         }
 
-        .registration-form button:hover {
-            background: #0056b3;
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(79,70,229,.30);
         }
 
-        .registration-form p {
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-text {
             text-align: center;
-            margin-top: 15px;
-            color: #555;
+            margin-top: 23px;
+            font-size: 13px;
+            color: #6b7280;
         }
 
-        .registration-form a {
-            color: #007BFF;
+        .login-text a {
+            color: #4f46e5;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        .registration-form a:hover {
+        .login-text a:hover {
             text-decoration: underline;
         }
 
-        @media (max-width: 480px) {
-            .registration-form {
-                padding: 30px 20px;
+        .security-note {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 22px;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+            .register-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 550px;
+            }
+
+            .register-left {
+                min-height: 330px;
+                padding: 40px;
+            }
+
+            .brand {
+                margin-bottom: 35px;
+            }
+
+            .register-left h1 {
+                font-size: 32px;
+            }
+
+            .features {
+                margin-top: 35px;
+            }
+
+            .register-right {
+                padding: 45px 40px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 12px;
+            }
+
+            .register-wrapper {
+                border-radius: 20px;
+            }
+
+            .register-left {
+                padding: 30px 25px;
+                min-height: 300px;
+            }
+
+            .register-left h1 {
+                font-size: 28px;
+            }
+
+            .register-left .description {
+                font-size: 13px;
+            }
+
+            .features {
+                gap: 11px;
+            }
+
+            .register-right {
+                padding: 35px 22px;
+            }
+
+            .form-header h2 {
+                font-size: 26px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 0;
             }
         }
     </style>
 </head>
+
 <body>
 
+<div class="register-wrapper">
 
-<form class="registration-form" action="" method="POST">
-    {% if messages %}
-    <div>
-        {% for message in messages %}
-            <p style="color: black; font-weight: bold;">{{ message }}</p>
-        {% endfor %}
-    </div>
-{% endif %}
-    {% csrf_token %}
-    <h2>Create Account</h2>
-    
-    <div class="input-group">
-        <input type="text" name="name" placeholder="Username" required>
-    </div>
-    
-    <div class="input-group">
-        <input type="email" name="email" placeholder="Email" required>
-    </div>
-    
-    <div class="input-group">
-        <input type="number" name="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" required>
-    </div>
-    
-    <div class="input-group">
-        <input type="password" name="password" placeholder="Password" required>
-    </div>
-    
-    <button type="submit">Register</button>
-</form>
+    <!-- LEFT SIDE -->
 
-   
-</form>
+    <div class="register-left">
 
+        <div class="left-content">
+
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+                <span>SmartFocus</span>
+            </div>
+
+            <h1>
+                Start your journey<br>
+                <span>with SmartFocus.</span>
+            </h1>
+
+            <p class="description">
+                Create your account and unlock a smarter,
+                more focused way to learn, plan and improve
+                your productivity.
+            </p>
+
+        </div>
+
+        <div class="features">
+
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Personalized learning experience</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <span>Track your study productivity</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <span>Your account stays secure</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+
+    <div class="register-right">
+
+        <div class="form-container">
+
+            <div class="form-header">
+                <h2>Create Account</h2>
+                <p>Enter your details to create your new account.</p>
+            </div>
+
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+
+            <form action="" method="POST">
+
+                {% csrf_token %}
+
+
+                <div class="input-group">
+                    <label>Username</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <div class="input-group">
+                    <label>Email Address</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉</span>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <div class="input-group">
+                    <label>Mobile Number</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">📱</span>
+
+                        <input
+                            type="tel"
+                            name="mobile"
+                            placeholder="10-digit mobile number"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            inputmode="numeric"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <div class="input-row">
+
+                    <div class="input-group">
+                        <label>Password</label>
+
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔒</span>
+
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Create password"
+                                autocomplete="new-password"
+                                required
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Confirm Password</label>
+
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔐</span>
+
+                            <input
+                                type="password"
+                                name="confirm_password"
+                                placeholder="Confirm password"
+                                autocomplete="new-password"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="register-btn">
+                    Create Account →
+                </button>
+
+            </form>
+
+
+            <div class="login-text">
+                Already have an account?
+                <a href="{% url 'login' %}">Sign in</a>
+            </div>
+
+            <div class="security-note">
+                🔒 Your information is protected and secure
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+
